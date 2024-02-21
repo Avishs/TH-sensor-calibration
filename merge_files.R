@@ -48,11 +48,30 @@ for (folder in list.dirs()){
 
 # read weather station file
 setwd('..')
-WeatherS <- read_excel("./weather_station_data/Jan_Feb_2024.xlsx")
+WeatherS <- read_excel("./weather_station_data/Jan_Feb_2024.xlsx", skip = 2) %>% 
+  select_if(~!all(is.na(.))) %>% 
+  rename(DateTime = `...1`) %>%
+  mutate(year = year(DateTime)) %>% 
+  mutate(month = month(DateTime)) %>% 
+  mutate(day = day(DateTime)) %>% 
+  mutate(hour = hour(DateTime))
+  
 
 # hourly averages
 
 sensor_data_hourly <- sensor_data %>%
-  #mutate(hourtime = cut(DateTime, breaks='hour')) %>%
-  group_by(sensor, hour(DateTime)) %>%
-  summarize(Air_Temp = mean(Humidity, na.rm = TRUE))
+  mutate(Air_Temp = as.numeric(Air_Temp)) %>%
+  mutate(Humidity = as.numeric(Humidity)) %>% 
+  mutate(Surface_Temp = as.numeric(Surface_Temp)) %>% 
+  group_by(sensor, 
+           year = year(DateTime), 
+           month = month(DateTime), 
+           day = day(DateTime),
+           hour = hour(DateTime)) %>% 
+  summarize(across(c(Air_Temp, Humidity, Surface_Temp),mean))
+
+# merge with weather station data
+
+merged_data <- left_join(sensor_data_hourly, WeatherS, by = c("year", "month", "day", "hour"))
+
+
