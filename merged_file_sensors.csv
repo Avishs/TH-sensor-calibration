@@ -1,4 +1,4 @@
-sensor,year,month,day,hour,Air_Temp,Humidity,Surface_Temp,DateTime,TMPF,HMD,TMP,RNF,WND,WNG,WNS,DEW,Date,Time,Ambient_Air_Temp,Rel_Humidity
+sensor,year,month,day,hour,Air_Temp_sensor,Humidity_sensor,Surface_Temp_sensor,DateTime,TMPF,WS_RH,WS_temp,RNF,WS_wind,WNG,WNS,WS_dewpt,Date,Time,HH_temp,HH_RH
 Sensor_1,2024,1,2,12,18.4,79.5,24.5,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
 Sensor_1,2024,1,8,14,20.583333333333332,74.86666666666666,19.268333333333334,2024-01-08T14:00:00Z,97.8,65,13.9,0,32,0,0,7.4,NA,NA,NA,NA
 Sensor_1,2024,1,8,15,21.14,71.735,19.2135,2024-01-08T15:00:00Z,129.7,54,15.8,0,32,0,0,6.5,NA,NA,NA,NA
