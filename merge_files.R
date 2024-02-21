@@ -72,6 +72,23 @@ sensor_data_hourly <- sensor_data %>%
 
 # merge with weather station data
 
-merged_data <- left_join(sensor_data_hourly, WeatherS, by = c("year", "month", "day", "hour"))
+merged_data <- 
+  left_join(sensor_data_hourly, WeatherS, by = c("year", "month", "day", "hour")) 
+
+
+# merge with hand held sensor
+
+handheld <- read_csv("Reference_measurement.csv") %>%
+  mutate(Date = dmy(Date)) %>% 
+  mutate(year = year(Date)) %>% 
+  mutate(month = month(Date)) %>% 
+  mutate(day = day(Date)) %>% 
+  mutate(hour = hour(Time))
+
+merged_data <- left_join(merged_data, handheld, by = c("year", "month", "day", "hour"))
+
+write_csv(merged_data, "merged_file_sensors.csv")
+
+# calibration
 
 
