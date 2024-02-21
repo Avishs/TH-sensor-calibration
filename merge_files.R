@@ -54,21 +54,25 @@ WeatherS <- read_excel("./weather_station_data/Jan_Feb_2024.xlsx", skip = 2) %>%
   mutate(year = year(DateTime)) %>% 
   mutate(month = month(DateTime)) %>% 
   mutate(day = day(DateTime)) %>% 
-  mutate(hour = hour(DateTime))
+  mutate(hour = hour(DateTime)) %>% 
+  rename(WS_temp = TMP) %>% 
+  rename(WS_RH = HMD) %>% 
+  rename(WS_wind = WND) %>% 
+  rename(WS_dewpt = DEW)
   
 
 # hourly averages
 
 sensor_data_hourly <- sensor_data %>%
-  mutate(Air_Temp = as.numeric(Air_Temp)) %>%
-  mutate(Humidity = as.numeric(Humidity)) %>% 
-  mutate(Surface_Temp = as.numeric(Surface_Temp)) %>% 
+  mutate(Air_Temp_sensor = as.numeric(Air_Temp)) %>%
+  mutate(Humidity_sensor = as.numeric(Humidity)) %>% 
+  mutate(Surface_Temp_sensor = as.numeric(Surface_Temp)) %>% 
   group_by(sensor, 
            year = year(DateTime), 
            month = month(DateTime), 
            day = day(DateTime),
            hour = hour(DateTime)) %>% 
-  summarize(across(c(Air_Temp, Humidity, Surface_Temp),mean))
+  summarize(across(c(Air_Temp_sensor, Humidity_sensor, Surface_Temp_sensor),mean))
 
 # merge with weather station data
 
@@ -83,7 +87,9 @@ handheld <- read_csv("Reference_measurement.csv") %>%
   mutate(year = year(Date)) %>% 
   mutate(month = month(Date)) %>% 
   mutate(day = day(Date)) %>% 
-  mutate(hour = hour(Time))
+  mutate(hour = hour(Time)) %>% 
+  rename(HH_temp = Ambient_Air_Temp) %>% 
+  rename(HH_RH = Rel_Humidity)
 
 merged_data <- left_join(merged_data, handheld, by = c("year", "month", "day", "hour"))
 
